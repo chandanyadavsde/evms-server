@@ -1,0 +1,36 @@
+{
+  "key": "empty_run",
+  "name": "Empty running",
+  "version": 1,
+  "initialStep": "drive_empty",
+  "steps": [
+    {
+      "key": "drive_empty",
+      "title": { "en": "Drive to next location (empty)", "hi": "अगले स्थान पर जाएं (खाली)" },
+      "actor": "driver",
+      "geoCheck": { "location": "to", "radiusM": 500 },
+      "fields": [
+        {
+          "key": "end_odometer",
+          "type": "number",
+          "label": { "en": "Odometer (km)", "hi": "ओडोमीटर (किमी)" },
+          "required": true,
+          "bind": "vehicle.odometer",
+          "rule": { ">=": [{ "var": "value" }, { "var": "context.vehicle.lastOdometer" }] },
+          "ruleMessage": {
+            "en": "Odometer cannot be lower than the last reading",
+            "hi": "ओडोमीटर पिछली रीडिंग से कम नहीं हो सकता"
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "action": "arrived",
+          "label": { "en": "Arrived", "hi": "पहुंच गया" },
+          "to": "end",
+          "style": "primary"
+        }
+      ]
+    }
+  ]
+}

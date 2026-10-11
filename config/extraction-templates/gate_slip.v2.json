@@ -1,0 +1,42 @@
+{
+  "key": "gate_slip",
+  "name": "Gate-in / gate-out slip",
+  "version": 2,
+  "kind": "document",
+  "docTypes": ["gate_out_slip", "gate_in_slip", "form_13", "eir"],
+  "description": "A terminal gate slip, Form 13 or equipment interchange receipt (EIR).",
+  "fields": [
+    {
+      "key": "document_number",
+      "label": "Document number",
+      "type": "string",
+      "required": true,
+      "labels": ["Gate Pass No", "Slip No", "Document No", "EIR No", "Form 13 No", "Pass No"]
+    },
+    {
+      "key": "container_number",
+      "label": "Container number",
+      "type": "container_number",
+      "required": true
+    },
+    {
+      "key": "vehicle_number",
+      "label": "Vehicle number",
+      "type": "string",
+      "labels": ["Vehicle No", "Truck No", "Vehicle Number"],
+      "pattern": "\\b([A-Z]{2}\\s?\\d{1,2}\\s?[A-Z]{1,3}\\s?\\d{3,4})\\b"
+    },
+    {
+      "key": "gate_time",
+      "label": "Gate time",
+      "type": "datetime",
+      "labels": ["Gate Time", "Gate In", "Gate Out", "Date & Time", "Time"]
+    },
+    {
+      "key": "condition",
+      "label": "Container condition / damage remarks",
+      "type": "string",
+      "labels": ["Condition", "Remarks", "Damage"]
+    }
+  ]
+}

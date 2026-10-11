@@ -1,0 +1,3 @@
+#!/bin/sh
+# Local safety net (no CI yet): lint, types and tests must pass before a commit.
+npm run check

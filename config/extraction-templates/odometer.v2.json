@@ -1,0 +1,19 @@
+{
+  "key": "odometer",
+  "name": "Odometer photo",
+  "version": 2,
+  "kind": "reading",
+  "reads": "odometer",
+  "description": "A photo of a truck's dashboard showing the odometer (total kilometres).",
+  "fields": [
+    {
+      "key": "reading",
+      "label": "Odometer (km)",
+      "type": "number",
+      "required": true,
+      "hint": "Total distance, not the trip meter",
+      "pattern": "(\\d[\\d,]{2,8})",
+      "pick": "largest"
+    }
+  ]
+}

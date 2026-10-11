@@ -1,0 +1,406 @@
+{
+  "$id": "FlowDefinition",
+  "additionalProperties": false,
+  "type": "object",
+  "required": ["key", "name", "version", "initialStep", "steps"],
+  "properties": {
+    "key": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "maxLength": 64,
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "initialStep": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "maxLength": 64,
+      "type": "string"
+    },
+    "steps": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["key", "title", "actor", "fields", "transitions"],
+        "properties": {
+          "key": {
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "maxLength": 64,
+            "type": "string"
+          },
+          "title": {
+            "$id": "LocalizedText",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "patternProperties": {
+                  "^(.*)$": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          },
+          "actor": {
+            "anyOf": [
+              {
+                "const": "driver",
+                "type": "string"
+              },
+              {
+                "const": "manager",
+                "type": "string"
+              }
+            ]
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": ["key", "type", "label"],
+              "properties": {
+                "key": {
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                "type": {
+                  "anyOf": [
+                    {
+                      "const": "text",
+                      "type": "string"
+                    },
+                    {
+                      "const": "number",
+                      "type": "string"
+                    },
+                    {
+                      "const": "date",
+                      "type": "string"
+                    },
+                    {
+                      "const": "select",
+                      "type": "string"
+                    },
+                    {
+                      "const": "photo",
+                      "type": "string"
+                    },
+                    {
+                      "const": "document",
+                      "type": "string"
+                    },
+                    {
+                      "const": "signature",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "label": {
+                  "$id": "LocalizedText",
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "object",
+                      "patternProperties": {
+                        "^(.*)$": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "docType": {
+                  "type": "string"
+                },
+                "options": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["value", "label"],
+                    "properties": {
+                      "value": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "$id": "LocalizedText",
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object",
+                            "patternProperties": {
+                              "^(.*)$": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "ai": {
+                  "additionalProperties": false,
+                  "type": "object",
+                  "properties": {
+                    "extract": {
+                      "type": "boolean"
+                    },
+                    "read": {
+                      "anyOf": [
+                        {
+                          "const": "odometer",
+                          "type": "string"
+                        },
+                        {
+                          "const": "soc",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "check": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "rule": {
+                  "$id": "Expression"
+                },
+                "ruleMessage": {
+                  "$id": "LocalizedText",
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "object",
+                      "patternProperties": {
+                        "^(.*)$": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "validate": {
+                  "const": "container_number",
+                  "type": "string"
+                },
+                "bind": {
+                  "anyOf": [
+                    {
+                      "const": "vehicle.odometer",
+                      "type": "string"
+                    },
+                    {
+                      "const": "vehicle.soc",
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": ["if", "require"],
+              "properties": {
+                "if": {
+                  "$id": "Expression"
+                },
+                "require": {
+                  "type": "array",
+                  "items": {
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "maxLength": 64,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "geoCheck": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": ["location", "radiusM"],
+            "properties": {
+              "location": {
+                "anyOf": [
+                  {
+                    "const": "from",
+                    "type": "string"
+                  },
+                  {
+                    "const": "to",
+                    "type": "string"
+                  }
+                ]
+              },
+              "radiusM": {
+                "minimum": 50,
+                "type": "integer"
+              }
+            }
+          },
+          "transitions": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": ["action", "label", "to"],
+              "properties": {
+                "action": {
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                "label": {
+                  "$id": "LocalizedText",
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "object",
+                      "patternProperties": {
+                        "^(.*)$": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "to": {
+                  "type": "string"
+                },
+                "style": {
+                  "anyOf": [
+                    {
+                      "const": "primary",
+                      "type": "string"
+                    },
+                    {
+                      "const": "secondary",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "skipValidation": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "onEnter": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": {
+                  "anyOf": [
+                    {
+                      "const": "notify",
+                      "type": "string"
+                    },
+                    {
+                      "const": "lr.create_pre_lr",
+                      "type": "string"
+                    },
+                    {
+                      "const": "lr.issue",
+                      "type": "string"
+                    },
+                    {
+                      "const": "lr.close",
+                      "type": "string"
+                    },
+                    {
+                      "const": "hook",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "onComplete": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": {
+                  "anyOf": [
+                    {
+                      "const": "notify",
+                      "type": "string"
+                    },
+                    {
+                      "const": "lr.create_pre_lr",
+                      "type": "string"
+                    },
+                    {
+                      "const": "lr.issue",
+                      "type": "string"
+                    },
+                    {
+                      "const": "lr.close",
+                      "type": "string"
+                    },
+                    {
+                      "const": "hook",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "sla": {
+            "type": "object",
+            "required": ["maxMinutes", "alert"],
+            "properties": {
+              "maxMinutes": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "alert": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

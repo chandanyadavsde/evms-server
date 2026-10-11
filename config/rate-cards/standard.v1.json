@@ -1,0 +1,47 @@
+{
+  "key": "standard",
+  "name": "Standard drayage rates (DEMO AMOUNTS — replace with real rates)",
+  "version": 1,
+  "currency": "INR",
+  "lines": [
+    {
+      "code": "freight",
+      "label": { "en": "Freight 20ft", "hi": "भाड़ा 20 फुट" },
+      "match": { "size": "20ft" },
+      "amount": 4500,
+      "per": "container"
+    },
+    {
+      "code": "freight",
+      "label": { "en": "Freight 40ft", "hi": "भाड़ा 40 फुट" },
+      "match": { "size": "40ft" },
+      "amount": 6500,
+      "per": "container"
+    },
+    {
+      "code": "freight",
+      "label": { "en": "Freight 20ft empty", "hi": "भाड़ा 20 फुट खाली" },
+      "match": { "size": "20ft", "state": "empty" },
+      "amount": 3000,
+      "per": "container"
+    },
+    {
+      "code": "freight",
+      "label": { "en": "Freight 40ft empty", "hi": "भाड़ा 40 फुट खाली" },
+      "match": { "size": "40ft", "state": "empty" },
+      "amount": 4200,
+      "per": "container"
+    }
+  ],
+  "extras": [
+    {
+      "code": "detention",
+      "label": { "en": "Port detention", "hi": "पोर्ट पर रुकावट शुल्क" },
+      "basis": "duration",
+      "from": { "step": "reach_pickup", "at": "completed" },
+      "to": { "step": "gate_out", "at": "completed" },
+      "freeMinutes": 240,
+      "ratePerHour": 500
+    }
+  ]
+}

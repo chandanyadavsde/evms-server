@@ -1,0 +1,229 @@
+{
+  "key": "export_cfs_port",
+  "name": "Export: CFS to Port",
+  "version": 2,
+  "initialStep": "load_at_cfs",
+  "steps": [
+    {
+      "key": "load_at_cfs",
+      "title": {
+        "en": "Load container at CFS",
+        "hi": "CFS पर कंटेनर लोड करें"
+      },
+      "actor": "driver",
+      "geoCheck": {
+        "location": "from",
+        "radiusM": 300
+      },
+      "fields": [
+        {
+          "key": "container_no",
+          "type": "text",
+          "label": {
+            "en": "Container number",
+            "hi": "कंटेनर नंबर"
+          },
+          "required": true,
+          "validate": "container_number"
+        },
+        {
+          "key": "seal_photo",
+          "type": "photo",
+          "label": {
+            "en": "Seal photo",
+            "hi": "सील फोटो"
+          },
+          "required": true
+        },
+        {
+          "key": "odometer",
+          "type": "number",
+          "label": {
+            "en": "Odometer (km)",
+            "hi": "ओडोमीटर (किमी)"
+          },
+          "required": true,
+          "bind": "vehicle.odometer",
+          "rule": {
+            ">=": [
+              {
+                "var": "value"
+              },
+              {
+                "var": "context.vehicle.lastOdometer"
+              }
+            ]
+          },
+          "ruleMessage": {
+            "en": "Odometer cannot be lower than the last reading",
+            "hi": "ओडोमीटर पिछली रीडिंग से कम नहीं हो सकता"
+          }
+        },
+        {
+          "key": "odometer_photo",
+          "type": "photo",
+          "label": {
+            "en": "Odometer photo",
+            "hi": "ओडोमीटर फोटो"
+          },
+          "ai": {
+            "read": "odometer"
+          }
+        },
+        {
+          "key": "battery_soc",
+          "type": "number",
+          "label": {
+            "en": "Battery (%)",
+            "hi": "बैटरी (%)"
+          },
+          "required": true,
+          "bind": "vehicle.soc"
+        }
+      ],
+      "transitions": [
+        {
+          "action": "loaded",
+          "label": {
+            "en": "Container Loaded",
+            "hi": "कंटेनर लोड हुआ"
+          },
+          "to": "reach_port",
+          "style": "primary"
+        }
+      ],
+      "onComplete": [
+        {
+          "type": "lr.issue"
+        }
+      ]
+    },
+    {
+      "key": "reach_port",
+      "title": {
+        "en": "Reach port gate",
+        "hi": "पोर्ट गेट पर पहुंचें"
+      },
+      "actor": "driver",
+      "geoCheck": {
+        "location": "to",
+        "radiusM": 500
+      },
+      "fields": [
+        {
+          "key": "gate_pass",
+          "type": "document",
+          "docType": "form_13",
+          "label": {
+            "en": "Gate pass / Form 13",
+            "hi": "गेट पास / फॉर्म 13"
+          },
+          "required": true,
+          "ai": {
+            "extract": true
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "action": "gate_in",
+          "label": {
+            "en": "Gate-in Done",
+            "hi": "गेट-इन हुआ"
+          },
+          "to": "drop_at_port",
+          "style": "primary"
+        }
+      ]
+    },
+    {
+      "key": "drop_at_port",
+      "title": {
+        "en": "Drop container at terminal",
+        "hi": "टर्मिनल पर कंटेनर उतारें"
+      },
+      "actor": "driver",
+      "fields": [
+        {
+          "key": "port_receipt",
+          "type": "document",
+          "docType": "port_receipt",
+          "label": {
+            "en": "Port receipt",
+            "hi": "पोर्ट रसीद"
+          },
+          "required": true,
+          "ai": {
+            "extract": true
+          }
+        },
+        {
+          "key": "end_odometer",
+          "type": "number",
+          "label": {
+            "en": "Odometer (km)",
+            "hi": "ओडोमीटर (किमी)"
+          },
+          "required": true,
+          "bind": "vehicle.odometer",
+          "rule": {
+            ">=": [
+              {
+                "var": "value"
+              },
+              {
+                "var": "fields.odometer"
+              }
+            ]
+          },
+          "ruleMessage": {
+            "en": "End odometer cannot be lower than loading odometer",
+            "hi": "अंतिम ओडोमीटर लोडिंग वाले ओडोमीटर से कम नहीं हो सकता"
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "action": "dropped",
+          "label": {
+            "en": "Container Dropped",
+            "hi": "कंटेनर उतारा"
+          },
+          "to": "manager_close",
+          "style": "primary"
+        }
+      ],
+      "onComplete": [
+        {
+          "type": "notify",
+          "target": "manager"
+        }
+      ]
+    },
+    {
+      "key": "manager_close",
+      "title": "Review and close leg",
+      "actor": "manager",
+      "fields": [
+        {
+          "key": "remarks",
+          "type": "text",
+          "label": "Remarks"
+        }
+      ],
+      "transitions": [
+        {
+          "action": "close_leg",
+          "label": "Close Leg",
+          "to": "end",
+          "style": "primary"
+        }
+      ],
+      "onComplete": [
+        {
+          "type": "lr.close"
+        }
+      ]
+    }
+  ]
+}

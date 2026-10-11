@@ -1,0 +1,379 @@
+{
+  "key": "import_port_cfs",
+  "name": "Import: Port to CFS",
+  "version": 2,
+  "initialStep": "reach_pickup",
+  "steps": [
+    {
+      "key": "reach_pickup",
+      "title": {
+        "en": "Reach port gate",
+        "hi": "पोर्ट गेट पर पहुंचें"
+      },
+      "actor": "driver",
+      "geoCheck": {
+        "location": "from",
+        "radiusM": 500
+      },
+      "fields": [
+        {
+          "key": "gate_in_photo",
+          "type": "photo",
+          "label": {
+            "en": "Gate-in photo",
+            "hi": "गेट-इन फोटो"
+          },
+          "required": true
+        }
+      ],
+      "transitions": [
+        {
+          "action": "reached_gate",
+          "label": {
+            "en": "Reached Gate",
+            "hi": "गेट पर पहुंचा"
+          },
+          "to": "container_pickup",
+          "style": "primary"
+        }
+      ],
+      "onComplete": [
+        {
+          "type": "notify",
+          "target": "manager"
+        }
+      ]
+    },
+    {
+      "key": "container_pickup",
+      "title": {
+        "en": "Pick up container",
+        "hi": "कंटेनर उठाएं"
+      },
+      "actor": "driver",
+      "fields": [
+        {
+          "key": "container_no",
+          "type": "text",
+          "label": {
+            "en": "Container number",
+            "hi": "कंटेनर नंबर"
+          },
+          "required": true,
+          "validate": "container_number",
+          "ai": {
+            "check": "match_with_lr"
+          }
+        },
+        {
+          "key": "seal_photo",
+          "type": "photo",
+          "label": {
+            "en": "Seal photo",
+            "hi": "सील फोटो"
+          },
+          "required": true
+        },
+        {
+          "key": "port_receipt",
+          "type": "document",
+          "docType": "port_receipt",
+          "label": {
+            "en": "Port receipt",
+            "hi": "पोर्ट रसीद"
+          },
+          "required": true,
+          "ai": {
+            "extract": true
+          }
+        },
+        {
+          "key": "odometer",
+          "type": "number",
+          "label": {
+            "en": "Odometer (km)",
+            "hi": "ओडोमीटर (किमी)"
+          },
+          "required": true,
+          "bind": "vehicle.odometer",
+          "rule": {
+            ">=": [
+              {
+                "var": "value"
+              },
+              {
+                "var": "context.vehicle.lastOdometer"
+              }
+            ]
+          },
+          "ruleMessage": {
+            "en": "Odometer cannot be lower than the last reading",
+            "hi": "ओडोमीटर पिछली रीडिंग से कम नहीं हो सकता"
+          }
+        },
+        {
+          "key": "odometer_photo",
+          "type": "photo",
+          "label": {
+            "en": "Odometer photo",
+            "hi": "ओडोमीटर फोटो"
+          },
+          "ai": {
+            "read": "odometer"
+          }
+        },
+        {
+          "key": "eir_document",
+          "type": "document",
+          "docType": "eir",
+          "label": {
+            "en": "EIR",
+            "hi": "EIR"
+          }
+        }
+      ],
+      "conditions": [
+        {
+          "if": {
+            "and": [
+              {
+                "==": [
+                  {
+                    "var": "cargo.size"
+                  },
+                  "40ft"
+                ]
+              },
+              {
+                "==": [
+                  {
+                    "var": "client.code"
+                  },
+                  "NIKE"
+                ]
+              }
+            ]
+          },
+          "require": ["eir_document"]
+        }
+      ],
+      "transitions": [
+        {
+          "action": "confirm_pickup",
+          "label": {
+            "en": "Confirm Pickup",
+            "hi": "पिकअप कन्फर्म करें"
+          },
+          "to": "gate_out",
+          "style": "primary"
+        },
+        {
+          "action": "report_issue",
+          "label": {
+            "en": "Report Issue",
+            "hi": "समस्या बताएं"
+          },
+          "to": "container_pickup",
+          "style": "secondary",
+          "skipValidation": true
+        }
+      ],
+      "onComplete": [
+        {
+          "type": "lr.issue"
+        }
+      ],
+      "sla": {
+        "maxMinutes": 120,
+        "alert": "manager"
+      }
+    },
+    {
+      "key": "gate_out",
+      "title": {
+        "en": "Gate-out from port",
+        "hi": "पोर्ट से गेट-आउट"
+      },
+      "actor": "driver",
+      "fields": [
+        {
+          "key": "gate_out_slip",
+          "type": "document",
+          "docType": "gate_out_slip",
+          "label": {
+            "en": "Gate-out slip",
+            "hi": "गेट-आउट पर्ची"
+          },
+          "required": true,
+          "ai": {
+            "extract": true
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "action": "gate_out_done",
+          "label": {
+            "en": "Left Port",
+            "hi": "पोर्ट से निकला"
+          },
+          "to": "reach_drop",
+          "style": "primary"
+        }
+      ]
+    },
+    {
+      "key": "reach_drop",
+      "title": {
+        "en": "Reach CFS",
+        "hi": "CFS पहुंचें"
+      },
+      "actor": "driver",
+      "geoCheck": {
+        "location": "to",
+        "radiusM": 300
+      },
+      "fields": [],
+      "transitions": [
+        {
+          "action": "reached_drop",
+          "label": {
+            "en": "Reached CFS",
+            "hi": "CFS पहुंचा"
+          },
+          "to": "drop",
+          "style": "primary"
+        }
+      ]
+    },
+    {
+      "key": "drop",
+      "title": {
+        "en": "Drop container",
+        "hi": "कंटेनर उतारें"
+      },
+      "actor": "driver",
+      "fields": [
+        {
+          "key": "pod",
+          "type": "document",
+          "docType": "pod",
+          "label": {
+            "en": "Proof of delivery",
+            "hi": "डिलीवरी प्रमाण"
+          },
+          "required": true
+        },
+        {
+          "key": "receiver_signature",
+          "type": "signature",
+          "label": {
+            "en": "Receiver signature",
+            "hi": "प्राप्तकर्ता के हस्ताक्षर"
+          },
+          "required": true
+        },
+        {
+          "key": "end_odometer",
+          "type": "number",
+          "label": {
+            "en": "Odometer (km)",
+            "hi": "ओडोमीटर (किमी)"
+          },
+          "required": true,
+          "bind": "vehicle.odometer",
+          "rule": {
+            ">=": [
+              {
+                "var": "value"
+              },
+              {
+                "var": "fields.odometer"
+              }
+            ]
+          },
+          "ruleMessage": {
+            "en": "End odometer cannot be lower than pickup odometer",
+            "hi": "अंतिम ओडोमीटर पिकअप वाले ओडोमीटर से कम नहीं हो सकता"
+          }
+        },
+        {
+          "key": "battery_soc",
+          "type": "number",
+          "label": {
+            "en": "Battery (%)",
+            "hi": "बैटरी (%)"
+          },
+          "required": true,
+          "bind": "vehicle.soc",
+          "rule": {
+            "and": [
+              {
+                ">=": [
+                  {
+                    "var": "value"
+                  },
+                  0
+                ]
+              },
+              {
+                "<=": [
+                  {
+                    "var": "value"
+                  },
+                  100
+                ]
+              }
+            ]
+          },
+          "ruleMessage": {
+            "en": "Battery must be between 0 and 100",
+            "hi": "बैटरी 0 से 100 के बीच होनी चाहिए"
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "action": "confirm_drop",
+          "label": {
+            "en": "Confirm Drop",
+            "hi": "ड्रॉप कन्फर्म करें"
+          },
+          "to": "manager_close",
+          "style": "primary"
+        }
+      ],
+      "onComplete": [
+        {
+          "type": "notify",
+          "target": "manager"
+        }
+      ]
+    },
+    {
+      "key": "manager_close",
+      "title": "Review and close leg",
+      "actor": "manager",
+      "fields": [
+        {
+          "key": "remarks",
+          "type": "text",
+          "label": "Remarks"
+        }
+      ],
+      "transitions": [
+        {
+          "action": "close_leg",
+          "label": "Close Leg",
+          "to": "end",
+          "style": "primary"
+        }
+      ],
+      "onComplete": [
+        {
+          "type": "lr.close"
+        }
+      ]
+    }
+  ]
+}

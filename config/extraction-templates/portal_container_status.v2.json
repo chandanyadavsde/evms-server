@@ -1,0 +1,93 @@
+{
+  "key": "portal_container_status",
+  "name": "Port portal: container status",
+  "version": 2,
+  "kind": "portal_screenshot",
+  "description": "A screenshot of a container terminal or port community portal page (e.g. NSICT, GTI, BMCT, JNPCT, PCS1x) showing the status of one or more containers.",
+  "multiple": true,
+  "applyToMoves": true,
+  "fields": [
+    {
+      "key": "container_number",
+      "label": "Container number",
+      "type": "container_number",
+      "required": true,
+      "hint": "4 letters + 7 digits, e.g. MSKU9070323"
+    },
+    {
+      "key": "terminal",
+      "label": "Terminal",
+      "type": "string",
+      "hint": "Terminal or port name shown on the page",
+      "keywords": [
+        "NSICT",
+        "NSIGT",
+        "GTI",
+        "APM",
+        "BMCT",
+        "PSA",
+        "JNPCT",
+        "NSFT",
+        "Mundra",
+        "Chennai"
+      ],
+      "scope": "page"
+    },
+    {
+      "key": "status",
+      "label": "Status",
+      "type": "string",
+      "hint": "e.g. Discharged, In yard, Customs cleared, Ready for delivery, On hold, Gated out",
+      "keywords": [
+        "Ready for delivery",
+        "Ready for pickup",
+        "Customs hold",
+        "Line hold",
+        "On hold",
+        "Hold",
+        "Discharged",
+        "In yard",
+        "Grounded",
+        "Gated out",
+        "Gate out",
+        "Gated in",
+        "Cleared",
+        "Out of charge",
+        "Loaded",
+        "Arrived"
+      ]
+    },
+    {
+      "key": "yard_location",
+      "label": "Yard location",
+      "type": "string",
+      "hint": "Block/row/bay position if shown",
+      "pattern": "\\b([A-Z]{1,2}\\d{1,3}[-/]\\d{1,3}[-/]?\\d{1,2})\\b"
+    },
+    {
+      "key": "size_type",
+      "label": "Size/type",
+      "type": "string",
+      "hint": "e.g. 20GP, 40HC",
+      "pattern": "\\b((?:20|40|45)\\s?(?:GP|HC|HQ|RF|OT|FR|DV|SD))\\b"
+    },
+    {
+      "key": "vessel",
+      "label": "Vessel / voyage",
+      "type": "string"
+    },
+    {
+      "key": "hold_reason",
+      "label": "Hold reason",
+      "type": "string",
+      "hint": "Customs, line or terminal hold if any",
+      "keywords": ["Customs", "Line", "Terminal", "DO pending", "Duty pending"]
+    },
+    {
+      "key": "valid_till",
+      "label": "Delivery / gate-in valid till",
+      "type": "datetime",
+      "hint": "Validity or cut-off date and time, ISO 8601"
+    }
+  ]
+}

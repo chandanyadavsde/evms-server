@@ -1,0 +1,49 @@
+{
+  "key": "port_receipt",
+  "name": "Port receipt",
+  "version": 2,
+  "kind": "document",
+  "docTypes": ["port_receipt"],
+  "description": "A port or terminal receipt/interchange slip issued when a container is picked up or dropped.",
+  "fields": [
+    {
+      "key": "receipt_number",
+      "label": "Receipt number",
+      "type": "string",
+      "required": true,
+      "labels": ["Receipt No", "Receipt Number", "Rcpt No", "Receipt #", "Slip No"]
+    },
+    {
+      "key": "container_number",
+      "label": "Container number",
+      "type": "container_number",
+      "required": true
+    },
+    {
+      "key": "terminal",
+      "label": "Terminal",
+      "type": "string",
+      "keywords": ["NSICT", "NSIGT", "GTI", "BMCT", "JNPCT", "NSFT"]
+    },
+    {
+      "key": "vehicle_number",
+      "label": "Vehicle number",
+      "type": "string",
+      "hint": "Truck registration, e.g. MH46 EV 1001",
+      "labels": ["Vehicle No", "Truck No", "Vehicle Number", "Trailer No"],
+      "pattern": "\\b([A-Z]{2}\\s?\\d{1,2}\\s?[A-Z]{1,3}\\s?\\d{3,4})\\b"
+    },
+    {
+      "key": "issued_at",
+      "label": "Date and time",
+      "type": "datetime",
+      "labels": ["Date", "Date & Time", "Issued", "Time"]
+    },
+    {
+      "key": "seal_number",
+      "label": "Seal number",
+      "type": "string",
+      "labels": ["Seal No", "Seal Number", "Seal"]
+    }
+  ]
+}

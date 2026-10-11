@@ -1,0 +1,24 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Flutter
+mobile/.dart_tool/
+mobile/build/
+mobile/.flutter-plugins*
+
+# local data (embedded db, uploads)
+.data/
+.playwright-mcp/
+ocr-cache/
+
+# Real documents and screenshots (driver phones, licences, client data) - never commit
+images/

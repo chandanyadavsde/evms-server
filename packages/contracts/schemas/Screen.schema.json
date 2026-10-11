@@ -1,0 +1,249 @@
+{
+  "$id": "Screen",
+  "type": "object",
+  "required": ["contractVersion", "step", "title", "components", "actions"],
+  "properties": {
+    "contractVersion": {
+      "const": 1,
+      "type": "number"
+    },
+    "step": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "$id": "Component",
+        "anyOf": [
+          {
+            "type": "object",
+            "required": ["type", "data"],
+            "properties": {
+              "type": {
+                "const": "info_card",
+                "type": "string"
+              },
+              "data": {
+                "type": "object",
+                "patternProperties": {
+                  "^(.*)$": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "key", "label", "required"],
+            "properties": {
+              "type": {
+                "const": "text",
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "value": {}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "key", "label", "required"],
+            "properties": {
+              "type": {
+                "const": "number",
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "value": {}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "key", "label", "required"],
+            "properties": {
+              "type": {
+                "const": "date",
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "value": {}
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "key", "label", "required", "options"],
+            "properties": {
+              "type": {
+                "const": "select",
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "value": {},
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["value", "label"],
+                  "properties": {
+                    "value": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "key", "label", "required"],
+            "properties": {
+              "type": {
+                "const": "photo",
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "value": {},
+              "aiRead": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "key", "label", "required"],
+            "properties": {
+              "type": {
+                "const": "document",
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "value": {},
+              "docType": {
+                "type": "string"
+              },
+              "aiExtract": {
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["type", "key", "label", "required"],
+            "properties": {
+              "type": {
+                "const": "signature",
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "value": {}
+            }
+          }
+        ]
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "style"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "style": {
+            "anyOf": [
+              {
+                "const": "primary",
+                "type": "string"
+              },
+              {
+                "const": "secondary",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "geoCheck": {
+      "type": "object",
+      "required": ["lat", "lng", "radiusM"],
+      "properties": {
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        },
+        "radiusM": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

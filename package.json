@@ -1,0 +1,31 @@
+{
+  "name": "evms-server",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @vms/server",
+    "start": "npm run start -w @vms/server",
+    "db:migrate": "npm run db:migrate -w @vms/server",
+    "db:seed": "npm run db:seed -w @vms/server",
+    "db:reset": "npm run db:reset -w @vms/server",
+    "eval:intake": "npm run eval:intake -w @vms/server",
+    "export-schemas": "npm run export-schemas -w @vms/contracts",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "check": "npm run lint && npm run typecheck && npm run test",
+    "hooks:install": "git config core.hooksPath .githooks"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.0",
+    "typescript": "^5.9.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

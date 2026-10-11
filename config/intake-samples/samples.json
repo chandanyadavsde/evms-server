@@ -1,0 +1,121 @@
+[
+  {
+    "name": "WhatsApp, English: import 2x20 with numbers",
+    "now": "2026-10-08T09:00:00+05:30",
+    "text": "Hi team, JM Baxi import 2x20 MSKU9070323 and CSQU3054383 from NSICT to CFS Alpha. Ready today 4pm, cut-off tomorrow 10:30",
+    "expect": {
+      "sourceKind": "customer_order",
+      "moves": [
+        {
+          "client": "JM Baxi",
+          "jobType": "Import: Port → CFS",
+          "size": "20ft container",
+          "containerNumber": "MSKU9070323",
+          "from": "NSICT (DP World)",
+          "to": "CFS Alpha, Uran",
+          "readyAt": "2026-10-08T16:00",
+          "cutoffAt": "2026-10-09T10:30"
+        },
+        {
+          "client": "JM Baxi",
+          "jobType": "Import: Port → CFS",
+          "size": "20ft container",
+          "containerNumber": "CSQU3054383",
+          "from": "NSICT (DP World)",
+          "to": "CFS Alpha, Uran",
+          "readyAt": "2026-10-08T16:00",
+          "cutoffAt": "2026-10-09T10:30"
+        }
+      ]
+    }
+  },
+  {
+    "name": "WhatsApp, Hinglish: export 1x40",
+    "now": "2026-10-08T09:00:00+05:30",
+    "text": "Bhai kal subah 10 baje CFS Bravo se 1x40 uthana hai, GTI pe drop karna hai. Nike ka maal hai. TGHU8791306. Cutoff kal sham 6 baje",
+    "expect": {
+      "sourceKind": "customer_order",
+      "moves": [
+        {
+          "client": "Nike",
+          "jobType": "Export: CFS → Port",
+          "size": "40ft container",
+          "containerNumber": "TGHU8791306",
+          "from": "CFS Bravo, Dronagiri",
+          "to": "GTI (APM Terminals)",
+          "readyAt": "2026-10-09T10:00",
+          "cutoffAt": "2026-10-09T18:00"
+        }
+      ]
+    }
+  },
+  {
+    "name": "WhatsApp: count only, no container numbers",
+    "now": "2026-10-08T09:00:00+05:30",
+    "text": "JM Baxi: 3 x 20 from DPW to CFS Alpha, ready 2pm today",
+    "expect": {
+      "sourceKind": "customer_order",
+      "moves": [
+        {
+          "client": "JM Baxi",
+          "size": "20ft container",
+          "from": "NSICT (DP World)",
+          "to": "CFS Alpha, Uran",
+          "readyAt": "2026-10-08T14:00"
+        },
+        {
+          "client": "JM Baxi",
+          "size": "20ft container",
+          "from": "NSICT (DP World)",
+          "to": "CFS Alpha, Uran",
+          "readyAt": "2026-10-08T14:00"
+        },
+        {
+          "client": "JM Baxi",
+          "size": "20ft container",
+          "from": "NSICT (DP World)",
+          "to": "CFS Alpha, Uran",
+          "readyAt": "2026-10-08T14:00"
+        }
+      ]
+    }
+  },
+  {
+    "name": "Email: one 40ft, dates in dd/mm/yyyy",
+    "now": "2026-10-08T09:00:00+05:30",
+    "text": "Dear Sir,\nPlease arrange pickup of container CSQU 305438-3 (40') from APM Terminals to Alpha CFS for Nike India.\nContainer available from 09/10/2026 08:00.\nPort cut-off 09/10/2026 20:00.\nRegards",
+    "expect": {
+      "sourceKind": "customer_order",
+      "moves": [
+        {
+          "client": "Nike",
+          "jobType": "Import: Port → CFS",
+          "size": "40ft container",
+          "containerNumber": "CSQU3054383",
+          "from": "GTI (APM Terminals)",
+          "to": "CFS Alpha, Uran",
+          "readyAt": "2026-10-09T08:00",
+          "cutoffAt": "2026-10-09T20:00"
+        }
+      ]
+    }
+  },
+  {
+    "name": "Portal pendency (EFORM 13 text): balance 2",
+    "now": "2026-10-08T09:00:00+05:30",
+    "text": "PIN Generation\nGroup Code: ULA   Container Type: Scan   Size: 20\nULA Pendency\nScan 20 40 45\nTotal Allocated Moves: 3 0 0\nGenerated PIN: 1 0 0\nBalance: 2 0 0",
+    "expect": {
+      "sourceKind": "portal_pendency",
+      "moves": [
+        { "client": "JM Baxi", "size": "20ft container" },
+        { "client": "JM Baxi", "size": "20ft container" }
+      ]
+    }
+  },
+  {
+    "name": "Portal pendency (EFORM 13 text): nothing left",
+    "now": "2026-10-08T09:00:00+05:30",
+    "text": "PIN Generation\nGroup Code: ULA\nULA Pendency\nScan 20 40 45\nTotal Allocated Moves: 1 0 0\nGenerated PIN: 1 0 0\nBalance: 0 0 0",
+    "expect": { "sourceKind": "portal_pendency", "moves": [] }
+  }
+]

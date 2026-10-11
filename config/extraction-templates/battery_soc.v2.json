@@ -1,0 +1,18 @@
+{
+  "key": "battery_soc",
+  "name": "Battery state of charge photo",
+  "version": 2,
+  "kind": "reading",
+  "reads": "soc",
+  "description": "A photo of an electric truck's dashboard or display showing battery state of charge.",
+  "fields": [
+    {
+      "key": "reading",
+      "label": "Battery (%)",
+      "type": "number",
+      "required": true,
+      "hint": "0–100",
+      "pattern": "(\\d{1,3})\\s?%"
+    }
+  ]
+}
